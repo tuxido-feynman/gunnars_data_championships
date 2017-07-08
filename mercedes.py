@@ -11,8 +11,8 @@ def load_data(csv_path):
 
 # load the data
 csv_path = '/Users/mli3/ml/Kaggle/'
-train = load_data(csv_path + "train.csv")
-test = load_data(csv_path + "test.csv")
+train_orig = load_data(csv_path + "train.csv")
+test_orig = load_data(csv_path + "test.csv")
 
 
 train.describe()
@@ -34,7 +34,7 @@ y_train.hist(bins=200, figsize=(20,15))
 plt.show()
 
 # remove row without the maximum y (looks like outliet)
-train3 = train2.loc[data['y']!=data['y'].max()]
+train3 = train2.loc[train2['y']!=train2['y'].max()]
 
 c = train3.corr()
 s = c.unstack()
@@ -132,9 +132,10 @@ from sklearn.metrics import r2_score
 
 
 
-test = test_one_hot.drop(order_features[200:], axis=1)
-train = train_one_hot.drop(order_features[200:], axis=1) # Modify train to only take in the top 100 features and the target column y
+train = train_one_hot.drop(order_features[300:], axis=1) # Modify train to only take in the top 100 features and the target column y
 
+
+test = test_one_hot.loc[:,list(train.columns)]
 
 def display_scores(scores):
     print("Scores:", scores)
