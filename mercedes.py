@@ -132,19 +132,24 @@ from sklearn.metrics import r2_score
 
 
 
-test = test_one_hot.drop(['IDID'], axis=1).drop(order_features[200:], axis=1)
-train = train_one_hot.drop(['IDID'], axis=1).drop(order_features[200:], axis=1) # Modify train to only take in the top 100 features and the target column y
+test = test_one_hot.drop(order_features[200:], axis=1)
+train = train_one_hot.drop(order_features[200:], axis=1) # Modify train to only take in the top 100 features and the target column y
 
 
+def display_scores(scores):
+    print("Scores:", scores)
+    print("Mean:", scores.mean())
+    print("Standard deviation:", scores.std())
 
+from sklearn.model_selection import cross_val_score
 
 # Random Forest Regressor
 from sklearn.ensemble import RandomForestRegressor
 forest_reg = RandomForestRegressor()
-forest_reg.fit(train.drop(['y'],axis=1), train[['y']])
+forest_reg.fit(train.drop(['y'],axis=1), train['y'])
 
 
-forest_scores = cross_val_score(forest_reg, train.drop(['y'],axis=1), train[['y']], 
+forest_scores = cross_val_score(forest_reg, train.drop(['y'],axis=1), train['y'], 
     scoring="neg_mean_squared_error", cv=10)
 
 forest_rmse = np.sqrt(-forest_scores)
